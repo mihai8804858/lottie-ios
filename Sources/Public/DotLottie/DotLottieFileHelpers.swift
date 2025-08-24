@@ -277,7 +277,6 @@ extension DotLottieFile {
     async throws -> DotLottieFile
   {
     var dataTask: URLSessionDataTask?
-    let cancelTask = { dataTask?.cancel() }
     return try await withTaskCancellationHandler {
       try await withCheckedThrowingContinuation { continuation in
         dataTask = DotLottieFile.loadedFrom(url: url, session: session, dotLottieCache: dotLottieCache) { result in
@@ -285,7 +284,7 @@ extension DotLottieFile {
         }
       }
     } onCancel: {
-      cancelTask()
+      dataTask?.cancel()
     }
   }
 
