@@ -180,7 +180,6 @@ extension LottieAnimation {
     async -> LottieAnimation?
   {
     var dataTask: URLSessionDataTask?
-    let cancelTask = { dataTask?.cancel() }
     return await withTaskCancellationHandler {
       await withCheckedContinuation { continuation in
         dataTask = LottieAnimation.loadedFrom(
@@ -192,7 +191,7 @@ extension LottieAnimation {
           animationCache: animationCache)
       }
     } onCancel: {
-      cancelTask()
+      dataTask?.cancel()
     }
   }
 
